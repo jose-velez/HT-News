@@ -1,0 +1,27 @@
+{
+  "name": "ht-news",
+  "version": "1.0.0",
+  "description": "Application to let the user leave comments on the latest hot news",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jose363/HT-News.git"
+  },
+  "author": "Jose Velez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jose363/HT-News/issues"
+  },
+  "homepage": "https://github.com/jose363/HT-News#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cheerio": "^0.22.0",
+    "express": "^4.15.2",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.9.9",
+    "request": "^2.81.0"
+  }
+}
