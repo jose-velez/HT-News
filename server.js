@@ -74,3 +74,40 @@ app.get("/scrape", function(req, res) {
   });
   res.send("Scrape Complete. ");
 });
+
+// Need to get all the articles from that we scrape from mongodb
+app.get("/articles", function(req, res){
+  // Grab every doc on the Article array
+  Article.find({}, function(error, doc){
+    // If there's any error will going to console log the error
+    if(error){
+      console.log(error);
+    }
+    //If there's no error will send the json object to the browser
+    else {
+      res.json(doc);
+    }
+  });
+});
+
+// Need to get an article by a specific id
+app.get("/articles/:id", function(req, res){
+  // Find all the articles related to the specific id
+    //found on the url
+  Article.findOne({"_id": req.params.id})
+  // Populate all the note associated with it
+  .populate("note")
+  // Now execute our query
+  .exec(function(error, doc){
+    // log if there's any erro
+    if(error){
+      console.log(error);
+    }
+    else {
+      // Send the Json to the browser
+      res.json(doc);
+    }
+  });
+});
+
+// Create a new note or replace an existing one
