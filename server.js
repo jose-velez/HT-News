@@ -116,24 +116,34 @@ app.post("/articles/:id", function(req, res){
   var newNote = new Note(req.body);
   // Save the note to the db
   newNote.save(function(error, doc){
+    // Console any error
     if(error){
       console.log(error);
     }
     else{
+      // Find the article using the id
       Article.findOne({
         "id": req.params.id
       },
     {
       "note": doc._id
     })
+    // Execute the query
     .exec(function(err, doc){
+      // Look for errors
       if(err){
         console.log(err);
       }
+      // Send the doc to the browser
       else {
         res.send(doc);
       }
     });
     }
   });
+});
+
+// Listen on Port
+app.listen(3000, function(){
+  console.log("App Listening on Port 3000");
 });
