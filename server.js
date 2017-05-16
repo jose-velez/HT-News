@@ -61,12 +61,11 @@ app.get("/scrape", function(req, res) {
       // This effectively passes the result object to the entry (and the title and link)
       var entry = new Article(result);
 
-      entry.save(function(err, doc){
-        if(err){
+      entry.save(function(err, doc) {
+        if (err) {
           console.log(err);
-        }
-        else {
-            console.log(doc);
+        } else {
+          console.log(doc);
 
         }
       });
@@ -76,11 +75,11 @@ app.get("/scrape", function(req, res) {
 });
 
 // Need to get all the articles from that we scrape from mongodb
-app.get("/articles", function(req, res){
+app.get("/articles", function(req, res) {
   // Grab every doc on the Article array
-  Article.find({}, function(error, doc){
+  Article.find({}, function(error, doc) {
     // If there's any error will going to console log the error
-    if(error){
+    if (error) {
       console.log(error);
     }
     //If there's no error will send the json object to the browser
@@ -91,23 +90,50 @@ app.get("/articles", function(req, res){
 });
 
 // Need to get an article by a specific id
-app.get("/articles/:id", function(req, res){
+app.get("/articles/:id", function(req, res) {
   // Find all the articles related to the specific id
-    //found on the url
-  Article.findOne({"_id": req.params.id})
-  // Populate all the note associated with it
-  .populate("note")
-  // Now execute our query
-  .exec(function(error, doc){
-    // log if there's any erro
-    if(error){
-      console.log(error);
-    }
-    else {
-      // Send the Json to the browser
-      res.json(doc);
-    }
-  });
+  //found on the url
+  Article.findOne({
+      "_id": req.params.id
+    })
+    // Populate all the note associated with it
+    .populate("note")
+    // Now execute our query
+    .exec(function(error, doc) {
+      // log if there's any erro
+      if (error) {
+        console.log(error);
+      } else {
+        // Send the Json to the browser
+        res.json(doc);
+      }
+    });
 });
 
 // Create a new note or replace an existing one
+app.post("/articles/:id", function(req, res){
+  // Create a new Note sending the req.body
+  var newNote = new Note(req.body);
+  // Save the note to the db
+  newNote.save(function(error, doc){
+    if(error){
+      console.log(error);
+    }
+    else{
+      Article.findOne({
+        "id": req.params.id
+      },
+    {
+      "note": doc._id
+    })
+    .exec(function(err, doc){
+      if(err){
+        console.log(err);
+      }
+      else {
+        res.send(doc);
+      }
+    });
+    }
+  });
+});
